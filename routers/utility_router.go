@@ -9,7 +9,7 @@ import (
 func SetUtilityRoutes(router *gin.Engine) *gin.Engine {
 	user := router.Group("/utility")
 	{
-		user.GET("/health", controllers.HealthCheck)
+		user.GET("/health", controllers.HealthCheckHandler)
 	}
 
 	return router

@@ -59,7 +59,7 @@ func TestRouterContext(t *testing.T) {
 			Return().
 			Once()
 
-		HealthCheck(routerContext)
+		healthCheck(routerContext)
 
 		assert.Equal(routerContext.AssertCalled(t, test.response.method, test.response.statusCode, test.response.response), true)
 		routerContext.AssertExpectations(t)

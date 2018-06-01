@@ -17,8 +17,13 @@ type RouterContext interface {
 
 var cpuPercent = cpu.Percent
 
+// HealthCheckHandler wraps HealthCheck function for better testing
+func HealthCheckHandler(c *gin.Context) {
+	healthCheck(c)
+}
+
 // HealthCheck controller calls HealthCheck service and returns the result
-func HealthCheck(c RouterContext) {
+func healthCheck(c RouterContext) {
 
 	cpuUsage, err := cpuPercent(0, true)
 
