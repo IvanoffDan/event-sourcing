@@ -1,0 +1,9 @@
+version: '3.2'
+
+services:
+  server:
+    build: 
+      context: .
+    env_file:
+      - .env
+    command: go test ./...

@@ -11,7 +11,4 @@ services:
     volumes:
       - type: bind
         source: .
-        target: /go/src/github.com/IvanoffDan/coffee-karma
-
-volumes:
-  postgres-data:
+        target: /go/src/github.com/IvanoffDan/event-sourcing
