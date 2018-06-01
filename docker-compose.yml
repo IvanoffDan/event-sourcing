@@ -1,0 +1,17 @@
+version: '3.2'
+
+services:
+  server:
+    build: 
+      context: .
+    env_file:
+      - .env
+    ports:
+      - "8001:${PORT}"
+    volumes:
+      - type: bind
+        source: .
+        target: /go/src/github.com/IvanoffDan/coffee-karma
+
+volumes:
+  postgres-data:
