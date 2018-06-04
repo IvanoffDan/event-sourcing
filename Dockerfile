@@ -1,5 +1,7 @@
 FROM golang:1.10
 
+LABEL maintainer="ivanoff.daniil@gmail.com"
+
 COPY . ${GOPATH}/src/github.com/IvanoffDan/event-sourcing
 
 WORKDIR ${GOPATH}/src/github.com/IvanoffDan/event-sourcing
