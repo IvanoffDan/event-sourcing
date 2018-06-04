@@ -1,6 +1,6 @@
-FROM golang:1.10
+FROM golang:1.10.2
 
-LABEL maintainer="ivanoff.daniil@gmail.com"
+MAINTAINER ivanoff.daniil@gmail.com
 
 COPY . ${GOPATH}/src/github.com/IvanoffDan/event-sourcing
 
@@ -12,10 +12,11 @@ RUN govendor fetch +missing
 
 RUN go build -o ${GOPATH}/bin/app ${GOPATH}/src/github.com/IvanoffDan/event-sourcing/main.go
 
+
 CMD if [ ${ENV} = production ]; \
 	then \
 	${GOPATH}/bin/app; \
-	else \
+  else \
 	go get github.com/IvanoffDan/fresh && \
 	fresh -c ./runner.conf; \
 	fi

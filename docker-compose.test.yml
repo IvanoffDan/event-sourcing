@@ -4,6 +4,9 @@ services:
   server:
     build: 
       context: .
+    image: event-sourcing_server
     env_file:
       - .env
-    command: go test ./...
+    environment:
+     - ENV=production
+    command: go test ./... -coverprofile=coverage.out

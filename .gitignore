@@ -1,3 +1,5 @@
 .cache
 tmp
 /vendor/*/
+
+coverage.out
