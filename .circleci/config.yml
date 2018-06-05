@@ -1,12 +1,24 @@
 version: 2
 jobs:
-  build_go:
+  checkout_repo:
+    working_directory: ~/app
+    docker:
+      - image: circleci/node:6
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - app
+  test_go:
     working_directory: /app
     docker:
       - image: ivanoffdan/docker-codebeat
     steps:
-      - checkout
       - setup_remote_docker
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /
       - restore_cache:
           keys:
             - v1-{{ .Branch }}
@@ -34,8 +46,43 @@ jobs:
           name: Run tests and send coverage report to Codebeat
           command: |
             ./test.sh
+  test_client:
+    working_directory: ~/app/client
+    docker:
+      - image: circleci/node:6
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ~/
+      - restore_cache: # special step to restore the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Setup Dependencies
+          command: |
+            npm install
+      - run:
+          name: Install coverage reporters
+          command: |
+            sudo npm install -g codeclimate-test-reporter
+            sudo npm install -g codacy-coverage --save
+      - save_cache: # special step to save the dependency cache
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+      - run: # run tests
+          name: Run Test and Coverage
+          command: |
+            npm run test -- --coverage
+            cat ./coverage/lcov.info | codacy-coverage
+            codeclimate-test-reporter < ./coverage/lcov.info
 workflows:
   version: 2
-  build_and_test_go:
+  test:
     jobs:
-      - build_go
+      - checkout_repo
+      - test_go:
+          requires:
+            - checkout_repo
+      - test_client:
+          requires:
+            - checkout_repo
